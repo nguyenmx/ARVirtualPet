@@ -1,40 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet ,Text, View, Button, Image} from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import { Camera } from 'expo-camera';
+import { GestureHandlerRootView, PinchGestureHandler } from 'react-native-gesture-handler';
 
 const ARCamera = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [focusSquare, setFocusSquare] = useState({ visible: false, x: 0, y: 0 });
 
-useEffect(() => {
+  useEffect(() => {
     (async () => {
-      const cameraStatus = await Camera.requestPermissionsAsync();
+      const cameraStatus = await Camera.requestCameraPermissionsAsync();
       setHasCameraPermission(cameraStatus.status === 'granted');
-})();
+    })();
   }, []);
-const takePicture = async () => {
-    if(camera){
-        const data = await camera.takePictureAsync(null)
-        setImage(data.uri);
+
+  useEffect(() => {
+    if (isRefreshing) {
+      setIsRefreshing(false);
     }
+  }, [isRefreshing]);
+
+  const handleTouch = (event) => {
+    const { locationX, locationY } = event.nativeEvent;
+    setFocusSquare({ visible: true, x: locationX, y: locationY });
+
+    setTimeout(() => {
+      setFocusSquare((prevState) => ({ ...prevState, visible: false }));
+    }, 1000);
+
+    setIsRefreshing(true);
+  };
+
+  const handlePinch = (event) => {
+    const scale = event.nativeEvent.scale;
+    setZoom((currentZoom) => scale * currentZoom);
+  };
+
+  const cameraRef = useRef(null);
+
+  if (hasCameraPermission === null) {
+    return <Text>Requesting camera permission...</Text>;
   }
 
   if (hasCameraPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
   return (
-   <View style={{ flex: 1}}>
-      <View style={styles.cameraContainer}>
-            <Camera 
-            ref={ref => setCamera(ref)}
-            style={styles.fixedRatio} 
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <PinchGestureHandler
+        onGestureEvent={handlePinch}
+        onHandlerStateChange={(event) => {
+          if (event.nativeEvent.state === 'END') {
+            const scale = event.nativeEvent.scale;
+            setZoom((currentZoom) => scale * currentZoom);
+          }
+        }}
+      >
+        <View style={styles.container}>
+          <Camera
+            style={styles.camera}
             type={type}
-            ratio={'1:1'} />
-      </View>
-      <Button
-            title="Flip Image"
+            ref={cameraRef}
+            autoFocus={!isRefreshing ? Camera.Constants.AutoFocus.on : Camera.Constants.AutoFocus.off}
+            onTouchEnd={handleTouch}
+          />
+
+          {focusSquare.visible && (
+            <View
+              style={[
+                styles.focusSquare,
+                { top: focusSquare.y - 25, left: focusSquare.x - 25 },
+              ]}
+            />
+          )}
+
+            {/* <Button
+            title="Flip Camera"
             onPress={() => {
               setType(
                 type === Camera.Constants.Type.back
@@ -44,20 +90,29 @@ const takePicture = async () => {
             }}>
         </Button>
        <Button title="Take Picture" onPress={() => takePicture()} />
-        {image && <Image source={{uri: image}} style={{flex:1}}/>}
-   </View>
+        {image && <Image source={{uri: image}} style={{flex:1}}/>} */}
+        
+        </View>
+      </PinchGestureHandler>
+    </GestureHandlerRootView>
   );
-}
-
-export default ARCamera;
+};
 
 const styles = StyleSheet.create({
-  cameraContainer: {
-      flex: 1,
-      flexDirection: 'row'
+  container: {
+    flex: 1,
   },
-  fixedRatio:{
-      flex: 1,
-      aspectRatio: 1
-  }
-})
+  camera: {
+    flex: 1,
+  },
+  focusSquare: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderWidth: 2,
+    borderColor: 'white',
+    backgroundColor: 'transparent',
+  },
+});
+
+export default ARCamera;

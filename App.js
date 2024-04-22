@@ -37,7 +37,7 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerTransparent: true, title: '' }}
         />
         {/* <Stack.Screen name="Display3DModel" component={Display3DModel} options={{ headerShown: false }}/> */}
-        <Stack.Screen name="ARCamera" component={ARCamera} />
+        <Stack.Screen name="ARCamera" component={ARCamera} options = {{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
