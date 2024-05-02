@@ -4,14 +4,15 @@ import { useNavigation } from '@react-navigation/native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ARCamera from './screens/ARCamera';
+import DisplayModel from './screens/DisplayModel';
 
 const Stack = createStackNavigator();
 
 function HomeScreen() {
   const navigation = useNavigation();
   
-  const goTo3DModelScreen = () => {
-    navigation.navigate('Display3DModel');
+  const goToModelScreen = () => {
+    navigation.navigate('DisplayModel');
   };
 
   const goToARCameraScreen = () => {
@@ -20,7 +21,7 @@ function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={goTo3DModelScreen}>
+      <TouchableOpacity style={styles.button} onPress={goToModelScreen}>
         <Text style={styles.buttonText}>3D Model</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={goToARCameraScreen}>
@@ -36,7 +37,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerTransparent: true, title: '' }}
         />
-        {/* <Stack.Screen name="Display3DModel" component={Display3DModel} options={{ headerShown: false }}/> */}
+        <Stack.Screen name="DisplayModel" component={DisplayModel} options={{ headerShown: false }}/>
         <Stack.Screen name="ARCamera" component={ARCamera} options = {{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
