@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import { GestureHandlerRootView, PinchGestureHandler } from 'react-native-gesture-handler';
 
+
 const ARCamera = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
@@ -10,6 +11,7 @@ const ARCamera = () => {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [focusSquare, setFocusSquare] = useState({ visible: false, x: 0, y: 0 });
+  const [zoom, setZoom] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -37,7 +39,7 @@ const ARCamera = () => {
 
   const handlePinch = (event) => {
     const scale = event.nativeEvent.scale;
-    setZoom((currentZoom) => scale * currentZoom);
+    setZoom(scale);
   };
 
   const cameraRef = useRef(null);
@@ -50,16 +52,29 @@ const ARCamera = () => {
     return <Text>No access to camera</Text>;
   }
 
+  const takePicture = async () => {
+    if (cameraRef.current) {
+      try {
+        const data = await cameraRef.current.takePictureAsync(null);
+        const { height, width } = data;
+    
+        //const filteredImage = GrayScale(data); // Apply grayscale transformation
+    
+        console.log("Height:", height);
+        console.log("Width:", width);
+    
+        setImage(data.uri);
+    
+      } catch (error) {
+        console.error("Error while taking picture:", error);
+      }
+    }
+  }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <PinchGestureHandler
         onGestureEvent={handlePinch}
-        onHandlerStateChange={(event) => {
-          if (event.nativeEvent.state === 'END') {
-            const scale = event.nativeEvent.scale;
-            setZoom((currentZoom) => scale * currentZoom);
-          }
-        }}
       >
         <View style={styles.container}>
           <Camera
@@ -78,8 +93,7 @@ const ARCamera = () => {
               ]}
             />
           )}
-
-            {/* <Button
+           <Button
             title="Flip Camera"
             onPress={() => {
               setType(
@@ -90,7 +104,7 @@ const ARCamera = () => {
             }}>
         </Button>
        <Button title="Take Picture" onPress={() => takePicture()} />
-        {image && <Image source={{uri: image}} style={{flex:1}}/>} */}
+        {image && <Image source={{uri: image}} style={{flex:1}}/>}
         
         </View>
       </PinchGestureHandler>
