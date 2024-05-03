@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import { Camera } from 'expo-camera';
-import { GestureHandlerRootView, PinchGestureHandler } from 'react-native-gesture-handler';
 
 
 const ARCamera = () => {
@@ -72,10 +71,6 @@ const ARCamera = () => {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <PinchGestureHandler
-        onGestureEvent={handlePinch}
-      >
         <View style={styles.container}>
           <Camera
             style={styles.camera}
@@ -107,8 +102,6 @@ const ARCamera = () => {
         {image && <Image source={{uri: image}} style={{flex:1}}/>}
         
         </View>
-      </PinchGestureHandler>
-    </GestureHandlerRootView>
   );
 };
 

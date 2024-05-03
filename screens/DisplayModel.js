@@ -1,22 +1,25 @@
-import {StyleSheet} from 'react-native'
-import {Canvas} from '@react-three/fiber'
-import Box from '../components/Box';
+import React, { Suspense } from 'react'
+import { useFrame, Canvas } from '@react-three/fiber/native'
+import { useGLTF, Environment } from '@react-three/drei/native'
+import Cubone from '../components/Model/Cubone.glb'
+
+function Model({ url, ...rest }) {
+  const { scene } = useGLTF(url)
+  useFrame(() => (scene.rotation.y += 0.01))
+  return <primitive {...rest} object={scene} />
+}
 
 export default function DisplayModel() {
-    return (
-      <Canvas>
-        <ambientLight intensity= {0.005}/>
-        <spotLight intensity= {0.5} position={[-1, 1.5, 1.5]}/>
-        <directionalLight color= "white" position = {[10, 10, 10]}/>
-        <Box/>
-      </Canvas>
-    );
-  }
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  });
+  return (
+    <Canvas gl={{ physicallyCorrectLights: true }} camera={{ position: [-6, 0, 16], fov: 36 }}>
+      <color attach="background" args={[0xe2f4df]} />
+      <ambientLight />
+      <directionalLight intensity={1.1} position={[0.5, 0, 0.866]} />
+      <directionalLight intensity={0.8} position={[-6, 2, 2]} />
+      <Suspense>
+        <Environment preset="park" />
+        <Model url={Cubone} scale={5}/>
+      </Suspense>
+    </Canvas>
+  )
+}
