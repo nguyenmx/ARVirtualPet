@@ -18,6 +18,7 @@
     "expo-gl": "^13.6.0",
     "expo-permissions": "^14.4.0",
     "expo-status-bar": "~1.11.1",
+    "gl-matrix": "^3.4.3",
     "react": "18.2.0",
     "react-native": "0.73.6",
     "react-native-gesture-handler": "^2.16.1",

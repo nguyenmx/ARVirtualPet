@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import { Camera } from 'expo-camera';
+import DisplayModel from './DisplayModel';
 
 
 const ARCamera = () => {
@@ -78,7 +79,10 @@ const ARCamera = () => {
             ref={cameraRef}
             autoFocus={!isRefreshing ? Camera.Constants.AutoFocus.on : Camera.Constants.AutoFocus.off}
             onTouchEnd={handleTouch}
-          />
+          >
+        <DisplayModel />
+        </Camera>
+   
 
           {focusSquare.visible && (
             <View
@@ -88,6 +92,7 @@ const ARCamera = () => {
               ]}
             />
           )}
+
            <Button
             title="Flip Camera"
             onPress={() => {
