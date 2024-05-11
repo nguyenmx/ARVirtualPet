@@ -1,15 +1,24 @@
-import React, { useRef,useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useFrame, Canvas } from '@react-three/fiber/native';
 import { useGLTF, Environment,useAnimations } from '@react-three/drei/native';
 import { mat4, vec3 } from 'gl-matrix';
 import Shiba from '../components/Model/shiba.glb';
 import Chick from '../components/Model/Chick_Idle_A.glb'
 import {PanResponder} from 'react-native';
+import { LogBox } from 'react-native';
 
-function Model({ url, ...rest }) {
+LogBox.ignoreLogs([
+  'THREE.WebGLRenderer: EXT_color_buffer_float extension not supported.',
+  'EXGL: gl.pixelStorei() doesn\'t support this parameter yet!'
+]);
+
+function Model({ url, onClick, ...rest }) {
   const { scene, animations } = useGLTF(url);
   const modelRef = useRef();
   const { ref, mixer, names } = useAnimations(animations, modelRef);
+  const [isTapped, setIsTapped] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [previousX, setPreviousX] = useState(null);
 
   useEffect(() => {
     if (animations.length > 0) {
@@ -28,29 +37,34 @@ function Model({ url, ...rest }) {
 
   
   useFrame(() => {
-    if (modelRef.current) {
+    if (modelRef.current && isTapped) {
       // Rotate the model
-      modelRef.current.rotation.y += 0.01; // Rotate around the y-axis by 0.01 radians
+      modelRef.current.rotation.y += 0.01;
     }
   });
 
-  return <primitive {...rest} object={scene} ref={modelRef} />;
+  return (
+    <primitive
+      {...rest}
+      object={scene}
+      ref={modelRef}
+      onPointerDown={() => {
+        setIsTapped(true);
+        onClick && onClick(); // Call onClick function if provided
+      }}
+    />
+  );
 }
 
-const panResponder = PanResponder.create({
-  onStartShouldSetPanResponder: () => true,
-  onPanResponderGrant: () => {
-    console.log("PanResponder granted");
-    // timerRef.current = setInterval(() => {
-    //   setPanningDuration(prevDuration => prevDuration + 1000);
-    // }, 1000);
-  },
-});
-
 export default function DisplayModel() {
+
+  const handleModelClick = () => {
+    console.log('Model tapped!');
+  };
+
   return (
     <Canvas
-      {...panResponder.panHandlers}
+      // {...panResponder.panHandlers}
       gl={{ physicallyCorrectLights: true }}
       camera={{ position: [-9, 0, 16], fov: 36 }}
     >
@@ -62,13 +76,15 @@ export default function DisplayModel() {
 
       <Model
         url={Shiba}
-        scale={2} />
+        scale={2} 
+        onClick={handleModelClick}/>
 
       <Model
         url={Chick}
         scale={2}
         position={[2, 0, 0]} // Move the Chick model 5 units to the right along the x-axis
       />
+     
 
     </Canvas>
   );
