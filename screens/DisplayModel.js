@@ -6,6 +6,7 @@ import Shiba from '../components/Model/shiba.glb';
 import Chick from '../components/Model/Chick_Idle_A.glb'
 import {PanResponder} from 'react-native';
 import { LogBox } from 'react-native';
+import CustomSliders from '../components/UI/CustomSlider';
 
 LogBox.ignoreLogs([
   'THREE.WebGLRenderer: EXT_color_buffer_float extension not supported.',
@@ -16,9 +17,8 @@ function Model({ url, onClick, ...rest }) {
   const { scene, animations } = useGLTF(url);
   const modelRef = useRef();
   const { ref, mixer, names } = useAnimations(animations, modelRef);
-  const [isTapped, setIsTapped] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [previousX, setPreviousX] = useState(null);
+  const [isRotating, modelRotate] = useState(false);
+
 
   useEffect(() => {
     if (animations.length > 0) {
@@ -35,36 +35,47 @@ function Model({ url, onClick, ...rest }) {
   //   }
   // });
 
-  
   useFrame(() => {
-    if (modelRef.current && isTapped) {
-      // Rotate the model
-      modelRef.current.rotation.y += 0.01;
+    if (modelRef.current && isRotating) {
+      modelRef.current.rotation.y += 0.012;
     }
   });
+
+  const handlePointerDown = () => {
+    if (isRotating) {
+      modelRotate(false);
+    } 
+    else {
+      modelRotate(true);
+      onClick && onClick();
+    }
+  };
 
   return (
     <primitive
       {...rest}
       object={scene}
       ref={modelRef}
-      onPointerDown={() => {
-        setIsTapped(true);
-        onClick && onClick(); // Call onClick function if provided
-      }}
+      onPointerDown={handlePointerDown}
     />
   );
 }
 
 export default function DisplayModel() {
+  const [scale, setScale] = useState(7.5);
+  const [rotationX, setRotationX] = useState(0);
+  const [rotationY, setRotationY] = useState(0);
+  const [rotationZ, setRotationZ] = useState(0);
+
 
   const handleModelClick = () => {
     console.log('Model tapped!');
   };
+  
 
   return (
+    <>
     <Canvas
-      // {...panResponder.panHandlers}
       gl={{ physicallyCorrectLights: true }}
       camera={{ position: [-9, 0, 16], fov: 36 }}
     >
@@ -76,16 +87,30 @@ export default function DisplayModel() {
 
       <Model
         url={Shiba}
-        scale={2} 
-        onClick={handleModelClick}/>
+        scale={scale} 
+        onClick={handleModelClick}
+        rotationX={rotationX}
+        />
 
-      <Model
+      {/* <Model
         url={Chick}
-        scale={2}
+        scale={scale}
         position={[2, 0, 0]} // Move the Chick model 5 units to the right along the x-axis
-      />
+      /> */}
      
 
     </Canvas>
+
+    <CustomSliders
+        scale={scale}
+        rotationX={rotationX}
+        rotationY={rotationY}
+        rotationZ={rotationZ}
+        setScale={setScale}
+        setRotationX={setRotationX}
+        setRotationY={setRotationY}
+        setRotationZ={setRotationZ}
+      />
+      </>
   );
 }
