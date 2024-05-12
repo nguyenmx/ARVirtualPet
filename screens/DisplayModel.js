@@ -3,10 +3,13 @@ import { useFrame, Canvas } from '@react-three/fiber/native';
 import { useGLTF, Environment,useAnimations } from '@react-three/drei/native';
 import { mat4, vec3 } from 'gl-matrix';
 import Shiba from '../components/Model/shiba.glb';
+import Cubone from '../components/Model/Cubone.glb';
 import Chick from '../components/Model/Chick_Idle_A.glb'
 import {PanResponder} from 'react-native';
 import { LogBox } from 'react-native';
 import CustomSliders from '../components/UI/CustomSlider';
+import { Accelerometer } from 'expo-sensors';
+import ModelSelector from '../components/UI/ModelSelector';
 
 LogBox.ignoreLogs([
   'THREE.WebGLRenderer: EXT_color_buffer_float extension not supported.',
@@ -18,6 +21,33 @@ function Model({ url, onClick, ...rest }) {
   const modelRef = useRef();
   const { ref, mixer, names } = useAnimations(animations, modelRef);
   const [isRotating, modelRotate] = useState(false);
+  
+  
+  const [rotation, setRotation] = useState([0, 0, 0]);
+  const [subscription, setSubscription] = useState(null);
+
+  useEffect(() => {
+    let subscription;
+    const subscribeToAccelerometer = async () => {
+      subscription = Accelerometer.addListener(({ x, y, z }) => {
+        if (modelRef.current && isRotating) {
+          modelRef.current.rotation.y -= x * 0.03;
+        }
+      });
+    };
+
+    subscribeToAccelerometer();
+
+    return () => {
+      subscription && subscription.remove();
+    };
+  }, [isRotating]);
+
+  useEffect(() => {
+    if (animations.length > 0) {
+      mixer.clipAction(animations[0]).play();
+    }
+  }, [animations, mixer]);
 
 
   useEffect(() => {
@@ -34,12 +64,6 @@ function Model({ url, onClick, ...rest }) {
   //     mat4.multiply(modelRef.current.matrixWorld, modelRef.current.matrixWorld, rotationMatrix);
   //   }
   // });
-
-  useFrame(() => {
-    if (modelRef.current && isRotating) {
-      modelRef.current.rotation.y += 0.012;
-    }
-  });
 
   const handlePointerDown = () => {
     if (isRotating) {
@@ -66,15 +90,21 @@ export default function DisplayModel() {
   const [rotationX, setRotationX] = useState(0);
   const [rotationY, setRotationY] = useState(0);
   const [rotationZ, setRotationZ] = useState(0);
-
+  const [selectedModel, setSelectedModel] = useState(Shiba);
+ 
 
   const handleModelClick = () => {
     console.log('Model tapped!');
+  };
+
+  const handleModelChange = (modelUrl) => {
+    setSelectedModel(modelUrl);
   };
   
 
   return (
     <>
+    <ModelSelector onChange={handleModelChange} />
     <Canvas
       gl={{ physicallyCorrectLights: true }}
       camera={{ position: [-9, 0, 16], fov: 36 }}
@@ -86,16 +116,22 @@ export default function DisplayModel() {
       <Environment preset="park" />
 
       <Model
-        url={Shiba}
+        url={selectedModel}
         scale={scale} 
         onClick={handleModelClick}
         />
 
       {/* <Model
+        url={Cubone}
+        scale={scale} 
+        onClick={handleModelClick}
+        /> */}
+
+      <Model
         url={Chick}
         scale={scale}
         position={[2, 0, 0]} // Move the Chick model 5 units to the right along the x-axis
-      /> */}
+      />
      
 
     </Canvas>

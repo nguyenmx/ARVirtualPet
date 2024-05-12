@@ -9,7 +9,7 @@ const CustomSliders = ({ scale, rotationX, rotationY, rotationZ, setRotationX, s
         flexDirection: 'column', 
         alignItems: 'center', 
         backgroundColor: '#373A38',
-        paddingVertical: 20,
+        paddingVertical: 15,
         paddingHorizontal: 12
       }}
     >
