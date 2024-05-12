@@ -104,7 +104,7 @@ export default function DisplayModel() {
 
   return (
     <>
-    <ModelSelector onChange={handleModelChange} />
+    <ModelSelector onChangeModel={handleModelChange} />
     <Canvas
       gl={{ physicallyCorrectLights: true }}
       camera={{ position: [-9, 0, 16], fov: 36 }}
@@ -127,11 +127,11 @@ export default function DisplayModel() {
         onClick={handleModelClick}
         /> */}
 
-      <Model
+      {/* <Model
         url={Chick}
         scale={scale}
         position={[2, 0, 0]} // Move the Chick model 5 units to the right along the x-axis
-      />
+      /> */}
      
 
     </Canvas>

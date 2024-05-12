@@ -1,17 +1,20 @@
+// DropdownComponent.js
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import Shiba from '../Model/shiba.glb';
+import Cubone from '../Model/Cubone.glb';
+import Chick from '../Model/Chick_Idle_A.glb'
 
 const data = [
-  { label: 'Chick', value: '1' },
-  { label: 'Cubone', value: '2' },
-  { label: 'Shiba', value: '3' },
+  { label: 'Chick', value: Chick },
+  { label: 'Cubone', value: Cubone },
+  { label: 'Shiba', value: Shiba },
 ];
 
-const DropdownComponent = () => {
+const DropdownComponent = ({ onChangeModel }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-
 
   return (
     <View style={styles.container}>
@@ -33,6 +36,7 @@ const DropdownComponent = () => {
         onBlur={() => setIsFocus(false)}
         onChange={item => {
           setValue(item.value);
+          onChangeModel(item.value); // Call the onChangeModel callback with the selected model URL
           setIsFocus(false);
         }}
       />
