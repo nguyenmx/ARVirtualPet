@@ -93,7 +93,7 @@ const ARCamera = () => {
             />
           )}
 
-           <Button
+           {/* <Button
             title="Flip Camera"
             onPress={() => {
               setType(
@@ -105,7 +105,7 @@ const ARCamera = () => {
         </Button>
        <Button title="Take Picture" onPress={() => takePicture()} />
         {image && <Image source={{uri: image}} style={{flex:1}}/>}
-        
+         */}
         </View>
   );
 };

@@ -89,7 +89,6 @@ export default function DisplayModel() {
         url={Shiba}
         scale={scale} 
         onClick={handleModelClick}
-        rotationX={rotationX}
         />
 
       {/* <Model

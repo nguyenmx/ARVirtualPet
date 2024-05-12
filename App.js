@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ARCamera from './screens/ARCamera';
 import DisplayModel from './screens/DisplayModel';
+import Sensor from './screens/Sensor';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,10 @@ function HomeScreen() {
     navigation.navigate('ARCamera');
   };
 
+  const goToSensorScreen = () => {
+    navigation.navigate('Sensor');
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={goToModelScreen}>
@@ -26,6 +31,9 @@ function HomeScreen() {
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={goToARCameraScreen}>
         <Text style={styles.buttonText}>AR Camera</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={goToSensorScreen}>
+        <Text style={styles.buttonText}>Sensor</Text>
       </TouchableOpacity>
     </View>
   );
@@ -39,6 +47,7 @@ export default function App() {
         />
         <Stack.Screen name="DisplayModel" component={DisplayModel} options={{ headerShown: false }}/>
         <Stack.Screen name="ARCamera" component={ARCamera} options = {{headerShown: false}}/>
+        <Stack.Screen name="Sensor" component={Sensor} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
