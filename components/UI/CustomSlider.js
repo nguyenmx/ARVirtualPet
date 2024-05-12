@@ -9,10 +9,15 @@ const CustomSliders = ({ scale, rotationX, rotationY, rotationZ, setRotationX, s
         flexDirection: 'column', 
         alignItems: 'center', 
         backgroundColor: '#373A38',
-        paddingVertical: 15,
-        paddingHorizontal: 12
+        paddingVertical: 18,
+        paddingHorizontal: 15
       }}
     >
+
+      <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={{ color: 'white' }}>Scale</Text>
+        <Text style={{ color: 'white' }}>{scale.toFixed(2)}</Text>
+      </View>
 
       <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Text style={{ color: 'white' }}>Scale</Text>

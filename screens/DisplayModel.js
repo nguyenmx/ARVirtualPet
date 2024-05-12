@@ -16,13 +16,11 @@ LogBox.ignoreLogs([
   'EXGL: gl.pixelStorei() doesn\'t support this parameter yet!'
 ]);
 
-function Model({ url, onClick, ...rest }) {
+function Model({ url, onClick, rotationX, rotationY, rotationZ, ...rest }) {
   const { scene, animations } = useGLTF(url);
   const modelRef = useRef();
   const { ref, mixer, names } = useAnimations(animations, modelRef);
   const [isRotating, modelRotate] = useState(false);
-  
-  
   const [rotation, setRotation] = useState([0, 0, 0]);
   const [subscription, setSubscription] = useState(null);
 
@@ -49,6 +47,18 @@ function Model({ url, onClick, ...rest }) {
     }
   }, [animations, mixer]);
 
+
+  useEffect(() => {
+      modelRef.current.rotation.x = rotationX * 0.004;
+  });
+
+  useEffect(() => {
+    modelRef.current.rotation.y = rotationY * 0.004;
+});
+
+useEffect(() => {
+  modelRef.current.rotation.z = rotationZ * 0.004;
+});
 
   useEffect(() => {
     if (animations.length > 0) {
@@ -107,7 +117,7 @@ export default function DisplayModel() {
     <ModelSelector onChangeModel={handleModelChange} />
     <Canvas
       gl={{ physicallyCorrectLights: true }}
-      camera={{ position: [-9, 0, 16], fov: 36 }}
+      camera={{ position: [-9, 0, 16], fov: 50 }}
     >
       {/* <color attach="background" args={[0xe2f4df]} /> */}
       <ambientLight />
@@ -119,6 +129,10 @@ export default function DisplayModel() {
         url={selectedModel}
         scale={scale} 
         onClick={handleModelClick}
+        rotationX={rotationX}
+        rotationY={rotationY}
+        rotationZ={rotationZ}
+        // position={[0, 0, 0]} // Centered position
         />
 
       {/* <Model

@@ -4,12 +4,18 @@ import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import Shiba from '../Model/shiba.glb';
 import Cubone from '../Model/Cubone.glb';
-import Chick from '../Model/Chick_Idle_A.glb'
+import Chick from '../Model/Chick_Idle_A.glb';
+import Mudkip from '../Model/mudkip_model.glb';
+import Bunny from '../Model/Bunny.glb';
 
 const data = [
+  { label: 'Bunny', value: Bunny },
   { label: 'Chick', value: Chick },
   { label: 'Cubone', value: Cubone },
+  { label: 'Mudkip', value: Mudkip },
   { label: 'Shiba', value: Shiba },
+
+
 ];
 
 const DropdownComponent = ({ onChangeModel }) => {
