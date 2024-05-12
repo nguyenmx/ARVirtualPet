@@ -132,7 +132,6 @@ export default function DisplayModel() {
         rotationX={rotationX}
         rotationY={rotationY}
         rotationZ={rotationZ}
-        // position={[0, 0, 0]} // Centered position
         />
 
       {/* <Model
