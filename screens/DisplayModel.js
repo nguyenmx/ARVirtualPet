@@ -16,7 +16,7 @@ LogBox.ignoreLogs([
   'EXGL: gl.pixelStorei() doesn\'t support this parameter yet!'
 ]);
 
-function Model({ url, onClick, rotationX, rotationY, rotationZ, ...rest }) {
+function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, ...rest }) {
   const { scene, animations } = useGLTF(url);
   const modelRef = useRef();
   const { ref, mixer, names } = useAnimations(animations, modelRef);
@@ -100,6 +100,7 @@ export default function DisplayModel() {
   const [rotationX, setRotationX] = useState(0);
   const [rotationY, setRotationY] = useState(0);
   const [rotationZ, setRotationZ] = useState(0);
+  const [brightness, setBrightness] = useState(0);
   const [selectedModel, setSelectedModel] = useState(Shiba);
  
 
@@ -120,7 +121,7 @@ export default function DisplayModel() {
       camera={{ position: [-9, 0, 16], fov: 50 }}
     >
       {/* <color attach="background" args={[0xe2f4df]} /> */}
-      <ambientLight />
+      <ambientLight intensity = {brightness}/>
       <directionalLight intensity={1.1} position={[0.5, 0, 0.866]} />
       <directionalLight intensity={0.8} position={[-6, 2, 2]} />
       <Environment preset="park" />
@@ -132,6 +133,7 @@ export default function DisplayModel() {
         rotationX={rotationX}
         rotationY={rotationY}
         rotationZ={rotationZ}
+        brightness={brightness}
         />
 
       {/* <Model
@@ -154,10 +156,12 @@ export default function DisplayModel() {
         rotationX={rotationX}
         rotationY={rotationY}
         rotationZ={rotationZ}
+        brightness={brightness}
         setScale={setScale}
         setRotationX={setRotationX}
         setRotationY={setRotationY}
         setRotationZ={setRotationZ}
+        setBrightness={setBrightness}
       />
       </>
   );

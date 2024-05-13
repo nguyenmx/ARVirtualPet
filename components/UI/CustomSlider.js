@@ -1,10 +1,22 @@
 import {React, useState} from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import SliderComponent from './SliderComponent';
 
 
-const CustomSliders = ({ scale, rotationX, rotationY, rotationZ, setRotationX, setRotationY, setRotationZ, setScale }) => {
+const CustomSliders = ({ 
+  scale, 
+  rotationX, 
+  rotationY, 
+  rotationZ, 
+  brightness,
+  setRotationX, 
+  setRotationY, 
+  setRotationZ, 
+  setScale,
+  setBrightness
+  }) => {
   
   const adjustOptions = [
     { label: 'Adjust', values: ['Scale', 'Rotate X', 'Rotate Y', 'Rotate Z'] },
@@ -13,39 +25,43 @@ const CustomSliders = ({ scale, rotationX, rotationY, rotationZ, setRotationX, s
   ];
 
 
+  const [selectLabel, setLabel] = useState('Adjust');
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
   const [selectColor, setSelectColor] = useState('lightgrey');
 
-  const handleOptionPress = (index) => {
+  const handleOptionPress = (index, label) => {
     setSelectedOptionIndex(index);
+    setLabel(label);
     // setSelectColor('cyan');
   };
 
   return (
+    <ScrollView style={{ maxHeight: 260 }}>
     <View 
       style={{ 
         flexDirection: 'column', 
         alignItems: 'center', 
         backgroundColor: '#373A38',
-        paddingVertical: 18,
-        paddingHorizontal: 15
+        paddingVertical: 12,
+        paddingHorizontal: 19
       }}
     >
-      <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+      {/*three options to divide each editing feature wip, replacing with slider design for now}
+      {/* <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
 
-      <TouchableOpacity onPress={() => handleOptionPress(0)}>
-        <Text style={{ color: 'cyan', marginHorizontal: 25, fontSize: 15, fontWeight: 'bold' }}>Adjust</Text>
+      <TouchableOpacity onPress={() => handleOptionPress(0, 'Adjust')}>
+        <Text style={{ color: selectColor, marginHorizontal: 25, fontSize: 15, fontWeight: 'bold' }}>Adjust</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handleOptionPress(1)}>
+      <TouchableOpacity onPress={() => handleOptionPress(1, 'Color')}>
         <Text style={{ color: selectColor, marginHorizontal: 25, fontSize: 15, fontWeight: 'bold' }}>Color</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handleOptionPress(2)}>
+      <TouchableOpacity onPress={() => handleOptionPress(2, 'Light')}>
         <Text style={{ color: selectColor, marginHorizontal: 25, fontSize: 15, fontWeight: 'bold' }}>Light</Text>
       </TouchableOpacity>
 
-      </View>
+      </View> */}
 
       <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
       <Text style={{ color: 'white' }}>{adjustOptions[selectedOptionIndex].values[0]}</Text>
@@ -89,6 +105,7 @@ const CustomSliders = ({ scale, rotationX, rotationY, rotationZ, setRotationX, s
         <Text style={{ color: 'white' }}>{adjustOptions[selectedOptionIndex].values[3]}</Text>
         <Text style={{ color: 'white' }}>{rotationZ.toFixed(2)}</Text>
       </View>
+
       <Slider
         style={{ width: '100%', height: 40 }}
         minimumValue={-180}
@@ -96,7 +113,32 @@ const CustomSliders = ({ scale, rotationX, rotationY, rotationZ, setRotationX, s
         value={rotationZ}
         onValueChange={(value) => setRotationZ(value)}
       />
+
+        {/*custom dynamic slider in wip}
+        <View>
+        {/* <SliderComponent
+          label={selectLabel}
+          value={rotationZ}
+          onValueChange={setRotationZ}
+          // min={-180}
+          // max={180}
+        />
+      </View> */}
+
+      <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={{ color: 'white' }}>{adjustOptions[1].values[1]}</Text>
+        <Text style={{ color: 'white' }}>{brightness.toFixed(2)}</Text>
+      </View>
+
+      <Slider
+        style={{ width: '100%', height: 40 }}
+        minimumValue={-1}
+        maximumValue={1}
+        value={brightness}
+        onValueChange={(value) => setBrightness(value)}
+      />
     </View>
+    </ScrollView>
     
   );
 };
