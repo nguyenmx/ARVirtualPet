@@ -3,9 +3,10 @@ import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import DisplayModel from './DisplayModel';
 import CustomButton from '../components/UI/CustomButton';
+import { useNavigation } from '@react-navigation/native';
 
 
-const ARCamera = (navigation) => {
+const ARCamera = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
@@ -13,6 +14,8 @@ const ARCamera = (navigation) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [focusSquare, setFocusSquare] = useState({ visible: false, x: 0, y: 0 });
   const [zoom, setZoom] = useState(0);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {

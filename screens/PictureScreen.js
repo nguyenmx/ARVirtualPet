@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Image } from 'react-native';
+import DisplayModel from './DisplayModel';
 
 const PictureScreen = ({ route }) => {
   const { imageUri } = route.params;

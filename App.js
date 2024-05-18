@@ -30,7 +30,7 @@ function HomeScreen() {
       <TouchableOpacity style={styles.button} onPress={goToModelScreen}>
         <Text style={styles.buttonText}>3D Model</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={goToARCameraScreen}>
+      <TouchableOpacity style={styles.button} onPress={goToARCameraScreen} navigation= {navigation}>
         <Text style={styles.buttonText}>AR Camera</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={goToSensorScreen}>
@@ -49,7 +49,7 @@ export default function App() {
         <Stack.Screen name="DisplayModel" component={DisplayModel} options={{ headerShown: false }}/>
         <Stack.Screen name="ARCamera" component={ARCamera} options = {{headerShown: false}}/>
         <Stack.Screen name="Sensor" component={Sensor} options={{ headerShown: false }} />
-        <Stack.Screen name="PictureScreen" component={PictureScreen} />
+        <Stack.Screen name="PictureScreen" component={PictureScreen} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
