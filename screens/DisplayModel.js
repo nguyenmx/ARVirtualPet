@@ -16,7 +16,7 @@ LogBox.ignoreLogs([
   'EXGL: gl.pixelStorei() doesn\'t support this parameter yet!'
 ]);
 
-function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, ...rest }) {
+function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp, tint, ...rest }) {
   const { scene, animations } = useGLTF(url);
   const modelRef = useRef();
   const { ref, mixer, names } = useAnimations(animations, modelRef);
@@ -30,6 +30,7 @@ function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, ...r
       subscription = Accelerometer.addListener(({ x, y, z }) => {
         if (modelRef.current && isRotating) {
           modelRef.current.rotation.y -= x * 0.03;
+          modelRef.current.rotation.x -= z * 0.0008;
         }
       });
     };
@@ -102,6 +103,8 @@ export default function DisplayModel() {
   const [rotationZ, setRotationZ] = useState(0);
   const [brightness, setBrightness] = useState(0);
   const [selectedModel, setSelectedModel] = useState(Shiba);
+  const [temp, setTemp] = useState(0);
+  const [tint, setTint] = useState(0);
  
 
   const handleModelClick = () => {
@@ -120,7 +123,6 @@ export default function DisplayModel() {
       gl={{ physicallyCorrectLights: true }}
       camera={{ position: [-9, 0, 16], fov: 50 }}
     >
-      {/* <color attach="background" args={[0xe2f4df]} /> */}
       <ambientLight intensity = {brightness}/>
       <directionalLight intensity={1.1} position={[0.5, 0, 0.866]} />
       <directionalLight intensity={0.8} position={[-6, 2, 2]} />
@@ -134,20 +136,9 @@ export default function DisplayModel() {
         rotationY={rotationY}
         rotationZ={rotationZ}
         brightness={brightness}
+        temp={temp}
+        tint={tint}
         />
-
-      {/* <Model
-        url={Cubone}
-        scale={scale} 
-        onClick={handleModelClick}
-        /> */}
-
-      {/* <Model
-        url={Chick}
-        scale={scale}
-        position={[2, 0, 0]} // Move the Chick model 5 units to the right along the x-axis
-      /> */}
-     
 
     </Canvas>
 
@@ -156,12 +147,16 @@ export default function DisplayModel() {
         rotationX={rotationX}
         rotationY={rotationY}
         rotationZ={rotationZ}
+        temp={temp}
+        tint={tint}
         brightness={brightness}
         setScale={setScale}
         setRotationX={setRotationX}
         setRotationY={setRotationY}
         setRotationZ={setRotationZ}
         setBrightness={setBrightness}
+        setTemp={temp}
+        setTint={tint}
       />
       </>
   );

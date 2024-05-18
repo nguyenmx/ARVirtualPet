@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import DisplayModel from './DisplayModel';
+import CustomButton from '../components/UI/CustomButton';
 
 
-const ARCamera = () => {
+const ARCamera = (navigation) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
@@ -56,20 +57,14 @@ const ARCamera = () => {
     if (cameraRef.current) {
       try {
         const data = await cameraRef.current.takePictureAsync(null);
-        const { height, width } = data;
-    
-        //const filteredImage = GrayScale(data); // Apply grayscale transformation
-    
-        console.log("Height:", height);
-        console.log("Width:", width);
-    
         setImage(data.uri);
-    
+        navigation.navigate('PictureScreen', { imageUri: data.uri });
       } catch (error) {
         console.error("Error while taking picture:", error);
       }
     }
   }
+
 
   return (
         <View style={styles.container}>
@@ -81,32 +76,40 @@ const ARCamera = () => {
             onTouchEnd={handleTouch}
           >
         <DisplayModel />
-        </Camera>
-   
-
-          {focusSquare.visible && (
+        {/* {focusSquare.visible && (
             <View
               style={[
                 styles.focusSquare,
-                { top: focusSquare.y - 25, left: focusSquare.x - 25 },
+                { top: focusSquare.y - 20, left: focusSquare.x - 20},
               ]}
             />
-          )}
+          )} */}
+        </Camera>
+        
 
-           {/* <Button
-            title="Flip Camera"
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-        </Button>
-       <Button title="Take Picture" onPress={() => takePicture()} />
-        {image && <Image source={{uri: image}} style={{flex:1}}/>}
-         */}
-        </View>
+    <View style = {styles.buttons}> 
+      <CustomButton
+        title="Flip Camera"
+        onPress={() => {
+          setType(
+            type === Camera.Constants.Type.back
+              ? Camera.Constants.Type.front
+              : Camera.Constants.Type.back
+          );
+        }}
+        color = 'yellow'
+      />
+
+      <CustomButton
+        title="Take Picture"
+        onPress={() => takePicture()}
+        color= 'red'
+      />
+    </View>
+        
+       {/* <Button title="Take Picture" onPress={() => takePicture()} />
+        {image && <Image source={{uri: image}} style={{flex:1}}/>} */}
+    </View>
   );
 };
 
@@ -125,6 +128,11 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     backgroundColor: 'transparent',
   },
+  buttons: {
+    flexDirection: 'row',
+    backgroundColor: '#373A38',
+    justifyContent: 'center'
+  }
 });
 
 export default ARCamera;

@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ARCamera from './screens/ARCamera';
 import DisplayModel from './screens/DisplayModel';
 import Sensor from './screens/Sensor';
+import PictureScreen from './screens/PictureScreen';
 
 const Stack = createStackNavigator();
 
@@ -48,6 +49,7 @@ export default function App() {
         <Stack.Screen name="DisplayModel" component={DisplayModel} options={{ headerShown: false }}/>
         <Stack.Screen name="ARCamera" component={ARCamera} options = {{headerShown: false}}/>
         <Stack.Screen name="Sensor" component={Sensor} options={{ headerShown: false }} />
+        <Stack.Screen name="PictureScreen" component={PictureScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

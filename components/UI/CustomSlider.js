@@ -1,7 +1,6 @@
 import {React, useState} from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SliderComponent from './SliderComponent';
 
 
@@ -11,11 +10,15 @@ const CustomSliders = ({
   rotationY, 
   rotationZ, 
   brightness,
+  temp,
+  tint,
   setRotationX, 
   setRotationY, 
   setRotationZ, 
   setScale,
-  setBrightness
+  setBrightness,
+  setTemp,
+  setTint
   }) => {
   
   const adjustOptions = [
@@ -36,7 +39,7 @@ const CustomSliders = ({
   };
 
   return (
-    <ScrollView style={{ maxHeight: 260 }}>
+    <ScrollView style={{ maxHeight: 242 }}>
     <View 
       style={{ 
         flexDirection: 'column', 
@@ -137,6 +140,32 @@ const CustomSliders = ({
         value={brightness}
         onValueChange={(value) => setBrightness(value)}
       />
+
+      {/* <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={{ color: 'white' }}>{adjustOptions[2].values[0]}</Text>
+        <Text style={{ color: 'white' }}>{temp.toFixed(2)}</Text>
+      </View>
+
+      <Slider
+        style={{ width: '100%', height: 40 }}
+        minimumValue={-1}
+        maximumValue={1}
+        value={temp}
+        // onValueChange={(value) => setTemp(value)}
+      />
+
+      <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={{ color: 'white' }}>{adjustOptions[2].values[1]}</Text>
+        <Text style={{ color: 'white' }}>{tint.toFixed(2)}</Text>
+      </View>
+
+      <Slider
+        style={{ width: '100%', height: 40 }}
+        minimumValue={-1}
+        maximumValue={1}
+        value={tint}
+        // onValueChange={(value) => setTint(value)}
+      /> */}
     </View>
     </ScrollView>
     
