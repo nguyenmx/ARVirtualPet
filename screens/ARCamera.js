@@ -4,6 +4,7 @@ import { Camera } from 'expo-camera';
 import DisplayModel from './DisplayModel';
 import CustomButton from '../components/UI/CustomButton';
 import { useNavigation } from '@react-navigation/native';
+import { useModelContext } from '../components/ReferenceData/ModelContext';
 
 
 const ARCamera = () => {
@@ -16,6 +17,7 @@ const ARCamera = () => {
   const [zoom, setZoom] = useState(0);
 
   const navigation = useNavigation();
+  const { resetState } = useModelContext();
 
   useEffect(() => {
     (async () => {
@@ -68,6 +70,10 @@ const ARCamera = () => {
     }
   }
 
+  const handleReset = () => {
+    resetState(); // Call the resetState function
+  };
+
 
   return (
         <View style={styles.container}>
@@ -104,14 +110,18 @@ const ARCamera = () => {
       />
 
       <CustomButton
+        title="Reset"
+        onPress={() => handleReset()}
+        color= 'white'
+      />
+
+      <CustomButton
         title="Take Picture"
         onPress={() => takePicture()}
         color= 'red'
       />
     </View>
         
-       {/* <Button title="Take Picture" onPress={() => takePicture()} />
-        {image && <Image source={{uri: image}} style={{flex:1}}/>} */}
     </View>
   );
 };

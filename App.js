@@ -7,6 +7,7 @@ import ARCamera from './screens/ARCamera';
 import DisplayModel from './screens/DisplayModel';
 import Sensor from './screens/Sensor';
 import PictureScreen from './screens/PictureScreen';
+import { ModelProvider } from './components/ReferenceData/ModelContext';
 
 const Stack = createStackNavigator();
 
@@ -30,7 +31,7 @@ function HomeScreen() {
       <TouchableOpacity style={styles.button} onPress={goToModelScreen}>
         <Text style={styles.buttonText}>3D Model</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={goToARCameraScreen} navigation= {navigation}>
+      <TouchableOpacity style={styles.button} onPress={goToARCameraScreen}>
         <Text style={styles.buttonText}>AR Camera</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={goToSensorScreen}>
@@ -42,6 +43,7 @@ function HomeScreen() {
 
 export default function App() {
   return (
+    <ModelProvider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerTransparent: true, title: '' }}
@@ -52,6 +54,7 @@ export default function App() {
         <Stack.Screen name="PictureScreen" component={PictureScreen} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
+    </ModelProvider>
   );
 }
 
