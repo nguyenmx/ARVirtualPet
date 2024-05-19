@@ -3,12 +3,14 @@ import { useFrame } from '@react-three/fiber/native';
 import { useGLTF, Environment, useAnimations } from '@react-three/drei/native';
 import { mat4 } from 'gl-matrix';
 import { Accelerometer } from 'expo-sensors';
+import { captureRef } from 'react-native-view-shot';
 
 function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp, tint, ...rest }) {
   const { scene, animations } = useGLTF(url);
   const modelRef = useRef();
   const { ref, mixer } = useAnimations(animations, modelRef);
   const [isRotating, modelRotate] = useState(false);
+  const viewRef = useRef();
 
   useEffect(() => {
     let subscription;
@@ -54,6 +56,7 @@ function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp
       onClick && onClick();
     }
   };
+  
 
   return (
     <primitive

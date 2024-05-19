@@ -42,7 +42,6 @@ export default function DisplayModel({showControls = true}) {
   const handleModelChange = (modelUrl) => {
     setSelectedModel(modelUrl);
   };
-  
 
   return (
     <>

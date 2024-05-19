@@ -5,19 +5,21 @@ import DisplayModel from './DisplayModel';
 import CustomButton from '../components/UI/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { useModelContext } from '../components/ReferenceData/ModelContext';
+import { captureRef } from 'react-native-view-shot';
 
 
 const ARCamera = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [isTakingPicture, setIsTakingPicture] = useState(false);
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [focusSquare, setFocusSquare] = useState({ visible: false, x: 0, y: 0 });
   const [zoom, setZoom] = useState(0);
-
   const navigation = useNavigation();
   const { resetState } = useModelContext();
+  const viewRef = useRef();
 
   useEffect(() => {
     (async () => {
@@ -43,10 +45,10 @@ const ARCamera = () => {
     setIsRefreshing(true);
   };
 
-  const handlePinch = (event) => {
-    const scale = event.nativeEvent.scale;
-    setZoom(scale);
-  };
+  // const handlePinch = (event) => {
+  //   const scale = event.nativeEvent.scale;
+  //   setZoom(scale);
+  // };
 
   const cameraRef = useRef(null);
 
@@ -58,33 +60,61 @@ const ARCamera = () => {
     return <Text>No access to camera</Text>;
   }
 
+  // const takePicture = async () => {
+  //   if (cameraRef.current) {
+  //     try {
+  //       const data = await cameraRef.current.takePictureAsync(null);
+  //       setImage(data.uri);
+  //       navigation.navigate('PictureScreen', { imageUri: data.uri });
+  //     } catch (error) {
+  //       console.error("Error while taking picture:", error);
+  //     }
+  //   }
+  // }
+  
   const takePicture = async () => {
-    if (cameraRef.current) {
-      try {
-        const data = await cameraRef.current.takePictureAsync(null);
-        setImage(data.uri);
-        navigation.navigate('PictureScreen', { imageUri: data.uri });
-      } catch (error) {
-        console.error("Error while taking picture:", error);
-      }
+    try {
+      const uri = await takeScreenshot();
+      navigation.navigate('PictureScreen', { imageUri: uri });
+    } catch (error) {
+      console.error("Error while taking picture:", error);
     }
-  }
+  };
+
+  const takeScreenshot = () => {
+    return new Promise((resolve, reject) => {
+      captureRef(viewRef, {
+        format: 'png',
+        quality: 1,
+      }).then(
+        uri => {
+          console.log('Image saved to', uri);
+          resolve(uri);
+        },
+        error => {
+          console.error('Oops, snapshot failed', error);
+          reject(error);
+        }
+      );
+    });
+  };
+  
 
   const handleReset = () => {
-    resetState(); // Call the resetState function
+    resetState();
   };
 
 
   return (
-        <View style={styles.container}>
-          <Camera
-            style={styles.camera}
-            type={type}
-            ref={cameraRef}
-            autoFocus={!isRefreshing ? Camera.Constants.AutoFocus.on : Camera.Constants.AutoFocus.off}
-            onTouchEnd={handleTouch}
-          >
-        <DisplayModel />
+    <View style={styles.container} ref={viewRef}>
+      <Camera
+        style={styles.camera}
+        type={type}
+        ref={cameraRef}
+        autoFocus={!isRefreshing ? Camera.Constants.AutoFocus.on : Camera.Constants.AutoFocus.off}
+        onTouchEnd={handleTouch}
+      >
+      <DisplayModel showControls={true} />
         {/* {focusSquare.visible && (
             <View
               style={[
@@ -95,7 +125,6 @@ const ARCamera = () => {
           )} */}
         </Camera>
         
-
     <View style = {styles.buttons}> 
       <CustomButton
         title="Flip Camera"
@@ -116,9 +145,9 @@ const ARCamera = () => {
       />
 
       <CustomButton
-        title="Take Picture"
+        title="Freeze"
         onPress={() => takePicture()}
-        color= 'red'
+        color= 'cyan'
       />
     </View>
         
