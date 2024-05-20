@@ -129,7 +129,7 @@ const CustomSliders = ({
       </View> */}
 
       <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Text style={{ color: 'white' }}>{adjustOptions[1].values[1]}</Text>
+        <Text style={{ color: 'white' }}>{adjustOptions[1].values[2]}</Text>
         <Text style={{ color: 'white' }}>{brightness.toFixed(2)}</Text>
       </View>
 

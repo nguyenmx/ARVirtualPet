@@ -7,6 +7,7 @@ import Chick from '../Model/Chick_Idle_A.glb';
 import Mudkip from '../Model/mudkip_model.glb';
 import Bunny from '../Model/Bunny.glb';
 
+// Current selection of models
 const data = [
   { label: 'Bunny', value: Bunny },
   { label: 'Chick', value: Chick },

@@ -20,7 +20,8 @@ LogBox.ignoreLogs([
   'EXGL: gl.pixelStorei() doesn\'t support this parameter yet!',
 ]);
 
-export default function DisplayModel({ showControls = true }) {
+export default function DisplayModel({showControls = true}) {
+  // Grab values and methods from the ReferenceData directory
   const {
     scale,
     setScale,
@@ -76,47 +77,57 @@ export default function DisplayModel({ showControls = true }) {
   
 
   return (
-    <View style={{ flex: 1 }}>
-      {showControls && <ModelSelector onChangeModel={handleModelChange} />}
-      <Canvas
-        gl={{ physicallyCorrectLights: true }}
-        camera={{ position: [-9, 0, 16], fov: 50 }}
-      >
-        <ambientLight intensity={brightness} />
-        <directionalLight intensity={1.1} position={[0.5, 0, 0.866]} />
-        <directionalLight intensity={0.8} position={[-6, 2, 2]} />
-        <Environment preset="park" />
-        <Model
-          url={selectedModel}
-          scale={scale}
-          rotationX={rotationX}
-          rotationY={rotationY}
-          rotationZ={rotationZ}
-          brightness={brightness}
-          temp={temp}
-          tint={tint}
-          color={modelColor}
+    <>
+
+    {/* Show model selector component */}
+
+    {showControls && <ModelSelector onChangeModel={handleModelChange} />}
+
+    {/* Create Canvas component here */}
+
+    <Canvas
+      gl={{ physicallyCorrectLights: true }}
+      camera={{ position: [-9, 0, 16], fov: 50 }}
+    >
+      <ambientLight intensity = {brightness}/>
+      <directionalLight intensity={1.1} position={[0.5, 0, 0.866]} />
+      <directionalLight intensity={0.8} position={[-6, 2, 2]} />
+      <Environment preset="park" />
+
+    {/* Import the model component and instantiate parameters */}
+
+      <Model
+        url={selectedModel}
+        scale={scale} 
+        rotationX={rotationX}
+        rotationY={rotationY}
+        rotationZ={rotationZ}
+        brightness={brightness}
+        temp={temp}
+        tint={tint}
         />
-      </Canvas>
-      {showControls && (
-        <CustomSliders
-          scale={scale}
-          rotationX={rotationX}
-          rotationY={rotationY}
-          rotationZ={rotationZ}
-          temp={temp}
-          tint={tint}
-          brightness={brightness}
-          setScale={setScale}
-          setRotationX={setRotationX}
-          setRotationY={setRotationY}
-          setRotationZ={setRotationZ}
-          setBrightness={setBrightness}
-          setTemp={setTemp}
-          setTint={setTint}
-        />
-      )}
-      <SideButtons onButtonPress={handleButtonPress2} onButtonPress2={handleButtonPress}  onButtonPress3={handleButtonPress3}  />
-    </View>
+
+    </Canvas>
+
+    {showControls && (
+       <CustomSliders
+        scale={scale}
+        rotationX={rotationX}
+        rotationY={rotationY}
+        rotationZ={rotationZ}
+        temp={temp}
+        tint={tint}
+        brightness={brightness}
+        setScale={setScale}
+        setRotationX={setRotationX}
+        setRotationY={setRotationY}
+        setRotationZ={setRotationZ}
+        setBrightness={setBrightness}
+        setTemp={temp}
+        setTint={tint}
+      />
+    )}
+          <SideButtons onButtonPress={handleButtonPress2} onButtonPress2={handleButtonPress}  onButtonPress3={handleButtonPress3}  />
+      </>
   );
 }

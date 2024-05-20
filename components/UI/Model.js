@@ -7,13 +7,16 @@ import { Accelerometer } from 'expo-sensors';
 import * as THREE from 'three';
 const textureLoader = new THREE.TextureLoader();
 const newTexture = textureLoader.load('../components/Model/M_Chick_baseColor.png');
+import { captureRef } from 'react-native-view-shot';
 
 function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp, tint, discoLights, ...rest }) {
   const { scene, animations } = useGLTF(url);
   const modelRef = useRef();
   const { ref, mixer } = useAnimations(animations, modelRef);
   const [isRotating, modelRotate] = useState(false);
+  const viewRef = useRef();
 
+  // Rotations based on the phone's gyroscope data
   useEffect(() => {
     let subscription;
     const subscribeToAccelerometer = async () => {
@@ -32,12 +35,14 @@ function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp
     };
   }, [isRotating]);
 
+  // Play chick animations
   useEffect(() => {
     if (animations.length > 0) {
       mixer.clipAction(animations[0]).play();
     }
   }, [animations, mixer]);
 
+  // Rotations based on current values from the slider
   useEffect(() => {
     if (modelRef.current) {
       modelRef.current.rotation.x = rotationX * 0.004;
@@ -46,6 +51,7 @@ function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp
     }
   }, [rotationX, rotationY, rotationZ]);
 
+  // Checks if the user has tapped on the model and rotates accordingly
   const handlePointerDown = () => {
     if (isRotating) {
       modelRotate(false);
@@ -54,6 +60,7 @@ function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp
       onClick && onClick();
     }
   };
+  
 
   return (
     <>
