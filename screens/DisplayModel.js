@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, LogBox, StyleSheet } from 'react-native';
+import { View, LogBox, StyleSheet, Button } from 'react-native';
 import { Canvas, useFrame } from '@react-three/fiber/native';
 import { Environment } from '@react-three/drei/native';
 import CustomSliders from '../components/UI/CustomSlider';
@@ -19,7 +19,7 @@ LogBox.ignoreLogs([
 
 const ParticleSystem = () => {
   const particlesRef = useRef();
-  const count = 6000;
+  const count = 4000;
 
   useEffect(() => {
     const particles = particlesRef.current;
@@ -61,7 +61,7 @@ const ParticleSystem = () => {
   return (
     <points ref={particlesRef}>
       <bufferGeometry />
-      <pointsMaterial color="white" size={0.035} />
+      <pointsMaterial color="white" size={0.09} />
     </points>
   );
 };
@@ -87,6 +87,7 @@ export default function DisplayModel({ showControls = true, style }) {
   } = useModelContext();
 
   const [modelColor, setModelColor] = useState('white');
+  const [showParticles, setShowParticles] = useState(true);
 
   const handleModelChange = (modelUrl) => {
     setSelectedModel(modelUrl);
@@ -112,12 +113,13 @@ export default function DisplayModel({ showControls = true, style }) {
   };
 
   const handleButtonPress3 = (buttonLabel) => {
-    console.log(`${buttonLabel} pressed`);
-    if (selectedModel === Chick || ChickBounce || ChickEat) {
-      if (buttonLabel === 'Button 2') {
-        setSelectedModel(Chick);
-      }
+    if (buttonLabel === 'Button 3') {
+      setModelColor('blue');
     }
+  };
+
+  const toggleParticles = () => {
+    setShowParticles((prev) => !prev);
   };
 
   return (
@@ -134,8 +136,8 @@ export default function DisplayModel({ showControls = true, style }) {
         <directionalLight intensity={0.8} position={[-6, 2, 2]} />
         <Environment preset="park" />
 
-        {/* Render particles first */}
-        <ParticleSystem />
+        {/* Conditionally render the particles */}
+        {showParticles && <ParticleSystem />}
 
         {/* Render the model */}
         <Model
@@ -173,6 +175,8 @@ export default function DisplayModel({ showControls = true, style }) {
         onButtonPress2={handleButtonPress}
         onButtonPress3={handleButtonPress3}
       />
+
+      <Button title="Toggle Particles" onPress={toggleParticles} />
     </View>
   );
 }
@@ -181,7 +185,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'pink',
-
   },
   canvas: {
     flex: 1,
