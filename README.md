@@ -9,7 +9,6 @@ ARVirtualPet is an interactive virtual pet application built using React Native 
 - Perform actions such as bouncing and eating with the pet model.
 - Toggle between different animations based on user interaction.
 - Change the color and rotation of the pet model through button presses.
-- Display disco lights around the pet model.
 - Integrate QR code scanning to trigger specific AR overlays or interactions.
 
 ## Installation
