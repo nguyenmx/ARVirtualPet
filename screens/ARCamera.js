@@ -113,7 +113,7 @@ const ARCamera = () => {
         autoFocus={!isRefreshing ? Camera.Constants.AutoFocus.on : Camera.Constants.AutoFocus.off}
         onTouchEnd={handleTouch}
       >
-      <DisplayModel showControls={true} />
+      <DisplayModel showControls={true} style={styles.customStyle}/>
         {/* {focusSquare.visible && (
             <View
               style={[
@@ -173,7 +173,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#373A38',
     justifyContent: 'center'
-  }
+  },
+  customStyle: {
+    backgroundColor: 'transparent', // Customize the background color here
+  },
 });
 
 export default ARCamera;
