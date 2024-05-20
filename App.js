@@ -27,7 +27,9 @@ function HomeScreen() {
   };
 
   return (
+
     <View style={styles.container}>
+    <Text style={styles.buttonText2}>ARVirtual Pet</Text>
       <TouchableOpacity style={styles.button} onPress={goToModelScreen}>
         <Text style={styles.buttonText}>3D Model</Text>
       </TouchableOpacity>
@@ -38,6 +40,8 @@ function HomeScreen() {
         <Text style={styles.buttonText}>Sensor</Text>
       </TouchableOpacity>
     </View>
+    
+
   );
 }
 
@@ -84,5 +88,13 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: 'white',
+  },
+  buttonText2: {
+    fontSize: 28,
+    color: 'black',
+    position: 'relative',
+    fontStyle: 'italic',
+    fontWeight: '100',
+ 
   },
 });

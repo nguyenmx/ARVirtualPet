@@ -1,10 +1,14 @@
+// Model.js
 import React, { useRef, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber/native';
 import { useGLTF, Environment, useAnimations } from '@react-three/drei/native';
 import { mat4 } from 'gl-matrix';
 import { Accelerometer } from 'expo-sensors';
+import * as THREE from 'three';
+const textureLoader = new THREE.TextureLoader();
+const newTexture = textureLoader.load('../components/Model/M_Chick_baseColor.png');
 
-function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp, tint, ...rest }) {
+function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp, tint, discoLights, ...rest }) {
   const { scene, animations } = useGLTF(url);
   const modelRef = useRef();
   const { ref, mixer } = useAnimations(animations, modelRef);
@@ -35,16 +39,12 @@ function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp
   }, [animations, mixer]);
 
   useEffect(() => {
-    modelRef.current.rotation.x = rotationX * 0.004;
-  }, [rotationX]);
-
-  useEffect(() => {
-    modelRef.current.rotation.y = rotationY * 0.004;
-  }, [rotationY]);
-
-  useEffect(() => {
-    modelRef.current.rotation.z = rotationZ * 0.004;
-  }, [rotationZ]);
+    if (modelRef.current) {
+      modelRef.current.rotation.x = rotationX * 0.004;
+      modelRef.current.rotation.y = rotationY * 0.004;
+      modelRef.current.rotation.z = rotationZ * 0.004;
+    }
+  }, [rotationX, rotationY, rotationZ]);
 
   const handlePointerDown = () => {
     if (isRotating) {
@@ -56,12 +56,17 @@ function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp
   };
 
   return (
-    <primitive
-      {...rest}
-      object={scene}
-      ref={modelRef}
-      onPointerDown={handlePointerDown}
-    />
+    <>
+      <primitive
+        {...rest}
+        object={scene}
+        ref={modelRef}
+        onPointerDown={handlePointerDown}
+      />
+      {discoLights && discoLights.map((light, index) => (
+        <pointLight key={index} position={light.position} color={light.color} intensity={1} />
+      ))}
+    </>
   );
 }
 

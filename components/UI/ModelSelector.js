@@ -13,8 +13,6 @@ const data = [
   { label: 'Cubone', value: Cubone },
   { label: 'Mudkip', value: Mudkip },
   { label: 'Shiba', value: Shiba },
-
-
 ];
 
 const DropdownComponent = ({ onChangeModel }) => {
