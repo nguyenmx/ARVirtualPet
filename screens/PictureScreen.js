@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 
+// Render a screenshot onto the screen
 const PictureScreen = ({ route }) => {
   const { imageUri } = route.params;
 

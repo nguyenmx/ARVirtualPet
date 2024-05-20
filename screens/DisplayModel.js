@@ -19,6 +19,7 @@ LogBox.ignoreLogs([
 ]);
 
 export default function DisplayModel({showControls = true}) {
+  // Grab values and methods from the ReferenceData directory
   const {
     scale,
     setScale,
@@ -45,7 +46,13 @@ export default function DisplayModel({showControls = true}) {
 
   return (
     <>
+
+    {/* Show model selector component */}
+
     {showControls && <ModelSelector onChangeModel={handleModelChange} />}
+
+    {/* Create Canvas component here */}
+
     <Canvas
       gl={{ physicallyCorrectLights: true }}
       camera={{ position: [-9, 0, 16], fov: 50 }}
@@ -54,6 +61,8 @@ export default function DisplayModel({showControls = true}) {
       <directionalLight intensity={1.1} position={[0.5, 0, 0.866]} />
       <directionalLight intensity={0.8} position={[-6, 2, 2]} />
       <Environment preset="park" />
+
+    {/* Import the model component and instantiate parameters */}
 
       <Model
         url={selectedModel}
@@ -67,6 +76,8 @@ export default function DisplayModel({showControls = true}) {
         />
 
     </Canvas>
+
+    {/* Render the customSlider component */}
 
     {showControls && (
        <CustomSliders

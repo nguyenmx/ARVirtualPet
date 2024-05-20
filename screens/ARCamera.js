@@ -21,6 +21,7 @@ const ARCamera = () => {
   const { resetState } = useModelContext();
   const viewRef = useRef();
 
+  // Checks if the camera has been given permission to access
   useEffect(() => {
     (async () => {
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
@@ -34,6 +35,7 @@ const ARCamera = () => {
     }
   }, [isRefreshing]);
 
+  // Focus on a particular area of the camera
   const handleTouch = (event) => {
     const { locationX, locationY } = event.nativeEvent;
     setFocusSquare({ visible: true, x: locationX, y: locationY });
@@ -44,11 +46,6 @@ const ARCamera = () => {
 
     setIsRefreshing(true);
   };
-
-  // const handlePinch = (event) => {
-  //   const scale = event.nativeEvent.scale;
-  //   setZoom(scale);
-  // };
 
   const cameraRef = useRef(null);
 
@@ -72,6 +69,7 @@ const ARCamera = () => {
   //   }
   // }
   
+  // Navigates to the pictureScreen
   const takePicture = async () => {
     try {
       const uri = await takeScreenshot();
@@ -81,6 +79,7 @@ const ARCamera = () => {
     }
   };
 
+  // Takes a screenshot of the current screen
   const takeScreenshot = () => {
     return new Promise((resolve, reject) => {
       captureRef(viewRef, {

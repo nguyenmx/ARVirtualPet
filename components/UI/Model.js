@@ -12,6 +12,7 @@ function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp
   const [isRotating, modelRotate] = useState(false);
   const viewRef = useRef();
 
+  // Rotations based on the phone's gyroscope data
   useEffect(() => {
     let subscription;
     const subscribeToAccelerometer = async () => {
@@ -30,12 +31,14 @@ function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp
     };
   }, [isRotating]);
 
+  // Play chick animations
   useEffect(() => {
     if (animations.length > 0) {
       mixer.clipAction(animations[0]).play();
     }
   }, [animations, mixer]);
 
+  // Rotations based on current values from the slider
   useEffect(() => {
     modelRef.current.rotation.x = rotationX * 0.004;
   }, [rotationX]);
@@ -48,6 +51,7 @@ function Model({ url, onClick, rotationX, rotationY, rotationZ, brightness, temp
     modelRef.current.rotation.z = rotationZ * 0.004;
   }, [rotationZ]);
 
+  // Checks if the user has tapped on the model and rotates accordingly
   const handlePointerDown = () => {
     if (isRotating) {
       modelRotate(false);
