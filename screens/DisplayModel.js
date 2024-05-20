@@ -11,10 +11,12 @@ import * as THREE from 'three';
 import Chick from '../components/Model/Chick_Idle_A.glb';
 import ChickBounce from '../components/Model/Chick_Bounce.glb';
 import ChickEat from '../components/Model/Chick_Eat.glb';
+import CustomButton from '../components/UI/CustomButton';
 
 LogBox.ignoreLogs([
   'THREE.WebGLRenderer: EXT_color_buffer_float extension not supported.',
   'EXGL: gl.pixelStorei() doesn\'t support this parameter yet!',
+  'Possible unhandled promise rejection'
 ]);
 
 const ParticleSystem = () => {
@@ -138,7 +140,6 @@ export default function DisplayModel({ showControls = true, style }) {
 
         {/* Conditionally render the particles */}
         {showParticles && <ParticleSystem />}
-
         {/* Render the model */}
         <Model
           url={selectedModel}
@@ -151,6 +152,14 @@ export default function DisplayModel({ showControls = true, style }) {
           tint={tint}
         />
       </Canvas>
+      <View style = {styles.buttons}> 
+        <SideButtons 
+        onButtonPress={handleButtonPress2} 
+        onButtonPress2={handleButtonPress} 
+        onButtonPress3={handleButtonPress3}
+        />
+        <CustomButton title="Particles" onPress={toggleParticles} color= '#CBC3E3'/>
+      </View>
 
       {showControls && (
         <CustomSliders
@@ -170,23 +179,23 @@ export default function DisplayModel({ showControls = true, style }) {
           setTint={setTint}
         />
       )}
-      <SideButtons
-        onButtonPress={handleButtonPress2}
-        onButtonPress2={handleButtonPress}
-        onButtonPress3={handleButtonPress3}
-      />
-
-      <Button title="Toggle Particles" onPress={toggleParticles} />
     </View>
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'pink',
+    backgroundColor: 'black',
   },
   canvas: {
     flex: 1,
   },
+  buttons: {
+    flexDirection: 'row',
+    backgroundColor: '#373A38',
+    justifyContent: 'center',
+
+  }
 });

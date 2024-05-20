@@ -39,13 +39,13 @@ const CustomSliders = ({
   };
 
   return (
-    <ScrollView style={{ maxHeight: 242 }}>
+    <ScrollView style={{ maxHeight: 220 }}>
     <View 
       style={{ 
         flexDirection: 'column', 
         alignItems: 'center', 
         backgroundColor: '#373A38',
-        paddingVertical: 12,
+        paddingVertical: 5,
         paddingHorizontal: 19
       }}
     >
