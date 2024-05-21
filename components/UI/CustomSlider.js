@@ -45,7 +45,7 @@ const CustomSliders = ({
         flexDirection: 'column', 
         alignItems: 'center', 
         backgroundColor: '#373A38',
-        paddingVertical: 5,
+        paddingVertical: 18,
         paddingHorizontal: 19
       }}
     >
